@@ -44,10 +44,20 @@ namespace Fiap.Web.AspNet5.Controllers
                 DataNascimento = DateTime.Now,
                 Observacao = "OBS4"
             });
+            listaClientes.Add(new ClienteModel
+            {
+                ClienteId = 2,
+                Nome = "Eduardo",
+                Email = "eduardo@gmail.com",
+                DataNascimento = DateTime.Now,
+                Observacao = "OBS3"
+            });
 
-            ViewBag.Clientes = listaClientes;
+            //ViewBag.Clientes = listaClientes;
+            //ViewData["Clientes"] = listaClientes;
+            //TempData["Clientes"] = listaClientes;
 
-            return View();
+            return View(listaClientes);
         }
 
 

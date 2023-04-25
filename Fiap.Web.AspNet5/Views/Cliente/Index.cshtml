@@ -1,8 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model IList<ClienteModel>
 
 <h1>Clientes</h1>
 
@@ -21,40 +17,21 @@
     </thead>
     <tbody>
 
-
+        @foreach (var cliente in Model)
+        {
         <tr>
-            <td data-field="id">#1</td>
-            <td data-field="name">Nome do Cliente 1</td>
-            <td data-field="sobrenome">Sobrenome Cliente 1</td>
+            <td data-field="id">#@cliente.ClienteId</td>
+            <td data-field="name">@cliente.Nome</td>
+            <td data-field="sobrenome">@cliente.Email</td>
             <td class="actions" width="220">
                 <a asp-controller="Cliente">Detalhe</a>
                 <a asp-controller="Cliente">Editar</a>
                 <a href="#">Remover</a>
             </td>
         </tr>
+        }
 
-        <tr>
-            <td data-field="id">#1</td>
-            <td data-field="name">Nome do Cliente 1</td>
-            <td data-field="sobrenome">Sobrenome Cliente 1</td>
-            <td class="actions" width="220">
-                <a asp-controller="Cliente">Detalhe</a>
-                <a asp-controller="Cliente">Editar</a>
-                <a href="#">Remover</a>
-            </td>
-        </tr>
-
-        <tr>
-            <td data-field="id">#1</td>
-            <td data-field="name">Nome do Cliente 1</td>
-            <td data-field="sobrenome">Sobrenome Cliente 1</td>
-            <td class="actions" width="220">
-                <a asp-controller="Cliente">Detalhe</a>
-                <a asp-controller="Cliente">Editar</a>
-                <a href="#">Remover</a>
-            </td>
-        </tr>
-
+        
 
     </tbody>
 </table>
