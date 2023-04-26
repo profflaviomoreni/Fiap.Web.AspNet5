@@ -85,5 +85,52 @@ namespace Fiap.Web.AspNet5.Controllers
             return View("Sucesso");
         }
 
+
+        [HttpGet]
+        public IActionResult Editar(int id)
+        {
+            // var cliente = "SELECT * FROM tabelaClientes WHERE id = {id}";
+            var clienteModel = new ClienteModel
+            {
+                ClienteId = 1,
+                Nome = "Flávio",
+                Email = "fmoreni@gmail.com",
+                DataNascimento = DateTime.Now,
+                Observacao = "OBS1"
+            };
+
+
+
+            return View(clienteModel);
+        }
+
+        [HttpPost]
+        public IActionResult Editar(ClienteModel clienteModel)
+        {
+            //UPDATE tabelaClientes SET Nome = {clienteModel.Nome} ... WHERE id = {clienteModel.ClienteId}
+
+            TempData["Mensagem"] = $"O cliente {clienteModel.Nome} foi alterado com sucesso";
+
+            return RedirectToAction("Index", "Cliente");
+        }
+
+
+        [HttpGet]
+        public IActionResult Detalhe(int id)
+        {
+            // var cliente = "SELECT * FROM tabelaClientes WHERE id = {id}";
+            var clienteModel = new ClienteModel
+            {
+                ClienteId = 1,
+                Nome = "Flávio",
+                Email = "fmoreni@gmail.com",
+                DataNascimento = DateTime.Now,
+                Observacao = "OBS1"
+            };
+
+            return View(clienteModel);
+        }
+
+
     }
 }
