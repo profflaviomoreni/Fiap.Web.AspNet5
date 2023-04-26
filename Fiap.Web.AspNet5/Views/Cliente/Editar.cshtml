@@ -6,6 +6,11 @@
             <div class="well">
                 <h2>Cliente - Editar</h2>
 
+                @if( ! String.IsNullOrEmpty( ViewBag.Mensagem )) {
+                    <div class="alert alert-warning" role="alert">@ViewBag.Mensagem</div>
+                }
+
+
                 <form asp-controller="Cliente" asp-action="Editar" method="post">
                     <input type="hidden" name="ClienteId" value="@Model.ClienteId" />
                     <div class="form-group">
@@ -28,7 +33,7 @@
                         <textarea class="form-control" name="Observacao">@Model.Observacao</textarea>
                     </div>
 
-                    <a href="#" class="btn btn-default btn-lg">Cancelar</a>
+                    <a asp-action="Index" class="btn btn-default btn-lg">Cancelar</a>
                     <button type="submit" class="btn btn-primary btn-lg">Gravar</button>
                 </form>
             </div>

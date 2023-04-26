@@ -64,8 +64,9 @@ namespace Fiap.Web.AspNet5.Controllers
         [HttpGet]
         public IActionResult Novo()
         {
-            //return Content("Novo Cliente");
-            return View();
+            //var clienteModel = new ClienteModel();
+
+            return View(new ClienteModel());
         }
 
 
@@ -73,16 +74,20 @@ namespace Fiap.Web.AspNet5.Controllers
         public IActionResult Novo(ClienteModel clienteModel)
         {
 
-            Console.WriteLine(clienteModel.Nome);
-            Console.WriteLine(clienteModel.Sobrenome);
+            if (String.IsNullOrEmpty(clienteModel.Nome))
+            {
+                ViewBag.Mensagem = $"O nome do cliente é requerido.";
 
-            // classeBancoDados.Insert(clienteModel);
-            //var mensagem = $"O cliente {clienteModel.Nome} foi cadastrado com sucesso";
-            //ViewBag.Mensagem = mensagem;
+                //return RedirectToAction("Editar", "Cliente", new { id = clienteModel.ClienteId} );
+                return View(clienteModel);
+            }
+            else
+            {
+                //UPDATE tabelaClientes SET Nome = {clienteModel.Nome} ... WHERE id = {clienteModel.ClienteId}
+                TempData["Mensagem"] = $"O cliente {clienteModel.Nome} foi cadastrado com sucesso";
 
-            ViewBag.Cliente = clienteModel;
-
-            return View("Sucesso");
+                return RedirectToAction("Index", "Cliente");
+            }
         }
 
 
@@ -107,11 +112,21 @@ namespace Fiap.Web.AspNet5.Controllers
         [HttpPost]
         public IActionResult Editar(ClienteModel clienteModel)
         {
-            //UPDATE tabelaClientes SET Nome = {clienteModel.Nome} ... WHERE id = {clienteModel.ClienteId}
+            if ( String.IsNullOrEmpty(clienteModel.Nome) )
+            {
+                ViewBag.Mensagem = $"O nome do cliente é requerido.";
 
-            TempData["Mensagem"] = $"O cliente {clienteModel.Nome} foi alterado com sucesso";
+                //return RedirectToAction("Editar", "Cliente", new { id = clienteModel.ClienteId} );
+                return View(clienteModel);
+            }
+            else
+            {
+                //UPDATE tabelaClientes SET Nome = {clienteModel.Nome} ... WHERE id = {clienteModel.ClienteId}
+                TempData["Mensagem"] = $"O cliente {clienteModel.Nome} foi alterado com sucesso";
 
-            return RedirectToAction("Index", "Cliente");
+                return RedirectToAction("Index", "Cliente");
+            }
+
         }
 
 
