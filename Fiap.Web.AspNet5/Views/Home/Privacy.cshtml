@@ -1,6 +1,17 @@
 ﻿@{
+    //Layout = "_LayoutDark";
     ViewData["Title"] = "Privacy Policy";
 }
 <h1>@ViewData["Title"]</h1>
 
 <p>Use this page to detail your site's privacy policy.</p>
+
+@section Scripts {
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+}
+
+@section Menu {
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Index">Fake</a>
+    </li>
+}
