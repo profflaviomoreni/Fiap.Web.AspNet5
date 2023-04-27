@@ -83,7 +83,8 @@ namespace Fiap.Web.AspNet5.Controllers
             }
             else
             {
-                //UPDATE tabelaClientes SET Nome = {clienteModel.Nome} ... WHERE id = {clienteModel.ClienteId}
+                Console.WriteLine(clienteModel.Nome);
+
                 TempData["Mensagem"] = $"O cliente {clienteModel.Nome} foi cadastrado com sucesso";
 
                 return RedirectToAction("Index", "Cliente");
@@ -112,7 +113,7 @@ namespace Fiap.Web.AspNet5.Controllers
         [HttpPost]
         public IActionResult Editar(ClienteModel clienteModel)
         {
-            if ( String.IsNullOrEmpty(clienteModel.Nome) )
+            if (String.IsNullOrEmpty(clienteModel.Nome))
             {
                 ViewBag.Mensagem = $"O nome do cliente é requerido.";
 
@@ -147,5 +148,16 @@ namespace Fiap.Web.AspNet5.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult Remover(int id)
+        {
+            //"DELETE FROM tabelaCliente WHERE id = {id}";
+
+            Console.WriteLine($" id: {id}");
+
+            TempData["Mensagem"] = $"O cliente foi removido com sucesso";
+
+            return RedirectToAction("Index", "Cliente");
+        }
     }
 }
