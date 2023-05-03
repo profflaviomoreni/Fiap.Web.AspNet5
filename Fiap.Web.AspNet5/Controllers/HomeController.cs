@@ -1,4 +1,5 @@
-﻿using Fiap.Web.AspNet5.Models;
+﻿using Fiap.Web.AspNet5.Data;
+using Fiap.Web.AspNet5.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -8,9 +9,14 @@ namespace Fiap.Web.AspNet5.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+
+        private DataContext dataContext;
+
+
+        public HomeController(ILogger<HomeController> logger, DataContext ctx)
         {
             _logger = logger;
+            dataContext = ctx;
         }
 
         public IActionResult Index()
@@ -20,6 +26,8 @@ namespace Fiap.Web.AspNet5.Controllers
 
         public IActionResult Privacy()
         {
+            var lista = dataContext.Fornecedores.ToList();
+
             return View();
         }
 
