@@ -7,36 +7,37 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Fiap.Web.AspNet5.Data;
 using Fiap.Web.AspNet5.Models;
+using Fiap.Web.AspNet5.Repository;
 
 namespace Fiap.Web.AspNet5.Controllers
 {
     public class FornecedorController : Controller
     {
-        private readonly DataContext _context;
+
+        private readonly FornecedorRepository fornecedorRepository; 
 
         public FornecedorController(DataContext context)
         {
-            _context = context;
+            fornecedorRepository = new FornecedorRepository(context);
         }
 
         // GET: Fornecedor
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-              return _context.Fornecedores != null ? 
-                          View(await _context.Fornecedores.ToListAsync()) :
-                          Problem("Entity set 'DataContext.Fornecedores'  is null.");
+            var lista = fornecedorRepository.FindAll();
+            return View(lista);
         }
 
         // GET: Fornecedor/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
-            if (id == null || _context.Fornecedores == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var fornecedorModel = await _context.Fornecedores
-                .FirstOrDefaultAsync(m => m.FornecedorId == id);
+            var fornecedorModel = fornecedorRepository.FindById((int) id);
+
             if (fornecedorModel == null)
             {
                 return NotFound();
@@ -51,31 +52,29 @@ namespace Fiap.Web.AspNet5.Controllers
             return View();
         }
 
-        // POST: Fornecedor/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FornecedorId,FornecedorNome,Cnpj,Telefone,Email")] FornecedorModel fornecedorModel)
+        public IActionResult Create(FornecedorModel fornecedorModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(fornecedorModel);
-                await _context.SaveChangesAsync();
+                fornecedorRepository.Insert(fornecedorModel);
+
                 return RedirectToAction(nameof(Index));
             }
             return View(fornecedorModel);
         }
 
         // GET: Fornecedor/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int id)
         {
-            if (id == null || _context.Fornecedores == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var fornecedorModel = await _context.Fornecedores.FindAsync(id);
+            var fornecedorModel = fornecedorRepository.FindById(id);
             if (fornecedorModel == null)
             {
                 return NotFound();
@@ -83,12 +82,10 @@ namespace Fiap.Web.AspNet5.Controllers
             return View(fornecedorModel);
         }
 
-        // POST: Fornecedor/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FornecedorId,FornecedorNome,Cnpj,Telefone,Email")] FornecedorModel fornecedorModel)
+        public IActionResult Edit(int id, FornecedorModel fornecedorModel)
         {
             if (id != fornecedorModel.FornecedorId)
             {
@@ -97,37 +94,24 @@ namespace Fiap.Web.AspNet5.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(fornecedorModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!FornecedorModelExists(fornecedorModel.FornecedorId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                
+                fornecedorRepository.Update(fornecedorModel);
+                
                 return RedirectToAction(nameof(Index));
+
             }
             return View(fornecedorModel);
         }
 
         // GET: Fornecedor/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
-            if (id == null || _context.Fornecedores == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var fornecedorModel = await _context.Fornecedores
-                .FirstOrDefaultAsync(m => m.FornecedorId == id);
+            var fornecedorModel = fornecedorRepository.FindById((int) id);
             if (fornecedorModel == null)
             {
                 return NotFound();
@@ -139,25 +123,20 @@ namespace Fiap.Web.AspNet5.Controllers
         // POST: Fornecedor/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            if (_context.Fornecedores == null)
-            {
-                return Problem("Entity set 'DataContext.Fornecedores'  is null.");
-            }
-            var fornecedorModel = await _context.Fornecedores.FindAsync(id);
+
+            var fornecedorModel = fornecedorRepository.FindById((int)id);
             if (fornecedorModel != null)
             {
-                _context.Fornecedores.Remove(fornecedorModel);
+                fornecedorRepository.Delete(fornecedorModel);
+                return RedirectToAction(nameof(Index));
             }
+
+            return View(fornecedorModel);
             
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
-        private bool FornecedorModelExists(int id)
-        {
-          return (_context.Fornecedores?.Any(e => e.FornecedorId == id)).GetValueOrDefault();
-        }
+
     }
 }
