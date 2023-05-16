@@ -1,4 +1,6 @@
-﻿using Fiap.Web.AspNet5.Models;
+﻿using Fiap.Web.AspNet5.Data;
+using Fiap.Web.AspNet5.Models;
+using Fiap.Web.AspNet5.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fiap.Web.AspNet5.Controllers
@@ -6,57 +8,20 @@ namespace Fiap.Web.AspNet5.Controllers
     public class ClienteController : Controller
     {
 
+        private readonly ClienteRepository clienteRepository;
+        private readonly RepresentanteRepository representanteRepository;
+
+        public ClienteController(DataContext dataContext)
+        {
+            clienteRepository = new ClienteRepository(dataContext);
+            representanteRepository = new RepresentanteRepository(dataContext);
+        }
+
+
         [HttpGet]
         public IActionResult Index()
         {
-            // SELECT * FROM tableClientes;
-
-            var listaClientes = new List<ClienteModel>();
-            listaClientes.Add(new ClienteModel
-            {
-                ClienteId = 1,
-                Nome = "Flávio",
-                Email = "fmoreni@gmail.com",
-                DataNascimento = DateTime.Now,
-                Observacao = "OBS1"
-            });
-            listaClientes.Add(new ClienteModel
-            {
-                ClienteId = 2,
-                Nome = "Eduardo",
-                Email = "eduardo@gmail.com",
-                DataNascimento = DateTime.Now,
-                Observacao = "OBS3"
-            });
-            listaClientes.Add(new ClienteModel
-            {
-                ClienteId = 3,
-                Nome = "Moreni",
-                Email = "moreni@gmail.com",
-                DataNascimento = DateTime.Now,
-                Observacao = "OBS3"
-            });
-            listaClientes.Add(new ClienteModel
-            {
-                ClienteId = 4,
-                Nome = "Luan",
-                Email = "luan@gmail.com",
-                DataNascimento = DateTime.Now,
-                Observacao = "OBS4"
-            });
-            listaClientes.Add(new ClienteModel
-            {
-                ClienteId = 2,
-                Nome = "Eduardo",
-                Email = "eduardo@gmail.com",
-                DataNascimento = DateTime.Now,
-                Observacao = "OBS3"
-            });
-
-            //ViewBag.Clientes = listaClientes;
-            //ViewData["Clientes"] = listaClientes;
-            //TempData["Clientes"] = listaClientes;
-
+            var listaClientes = clienteRepository.FindAllWithRepresentante();
             return View(listaClientes);
         }
 
@@ -64,7 +29,9 @@ namespace Fiap.Web.AspNet5.Controllers
         [HttpGet]
         public IActionResult Novo()
         {
-            //var clienteModel = new ClienteModel();
+            var representantes = representanteRepository.FindAll();
+
+            ViewBag.Representantes = representantes;
 
             return View(new ClienteModel());
         }
@@ -83,7 +50,7 @@ namespace Fiap.Web.AspNet5.Controllers
             }
             else
             {
-                Console.WriteLine(clienteModel.Nome);
+                clienteRepository.Insert(clienteModel);
 
                 TempData["Mensagem"] = $"O cliente {clienteModel.Nome} foi cadastrado com sucesso";
 
@@ -134,15 +101,7 @@ namespace Fiap.Web.AspNet5.Controllers
         [HttpGet]
         public IActionResult Detalhe(int id)
         {
-            // var cliente = "SELECT * FROM tabelaClientes WHERE id = {id}";
-            var clienteModel = new ClienteModel
-            {
-                ClienteId = 1,
-                Nome = "Flávio",
-                Email = "fmoreni@gmail.com",
-                DataNascimento = DateTime.Now,
-                Observacao = "OBS1"
-            };
+            var clienteModel = clienteRepository.FindByIdWithRepresentante(id);
 
             return View(clienteModel);
         }

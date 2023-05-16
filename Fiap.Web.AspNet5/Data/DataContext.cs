@@ -10,6 +10,7 @@ namespace Fiap.Web.AspNet5.Data
 
         public DbSet<FornecedorModel> Fornecedores { get; set; }
 
+        public DbSet<ClienteModel> Clientes { get; set; }
 
         public DataContext(DbContextOptions options) : base(options)
         {
