@@ -22,7 +22,7 @@ namespace Fiap.Web.AspNet5.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var lista = clienteRepository.FindByNomeAndEmailAndRepresentante("r","r",3);
+            //var lista = clienteRepository.FindByNomeAndEmailAndRepresentante("Roberto", "br", 0);
 
             var listaClientes = clienteRepository.FindAllWithRepresentante();
             return View(listaClientes);
@@ -64,18 +64,8 @@ namespace Fiap.Web.AspNet5.Controllers
         [HttpGet]
         public IActionResult Editar(int id)
         {
-            // var cliente = "SELECT * FROM tabelaClientes WHERE id = {id}";
-            var clienteModel = new ClienteModel
-            {
-                ClienteId = 1,
-                Nome = "Flávio",
-                Email = "fmoreni@gmail.com",
-                DataNascimento = DateTime.Now,
-                Observacao = "OBS1"
-            };
-
-
-
+            var clienteModel = clienteRepository.FindById(id);
+            ComboRepresentantes();
             return View(clienteModel);
         }
 
@@ -85,14 +75,13 @@ namespace Fiap.Web.AspNet5.Controllers
             if (String.IsNullOrEmpty(clienteModel.Nome))
             {
                 ViewBag.Mensagem = $"O nome do cliente é requerido.";
-
-                //return RedirectToAction("Editar", "Cliente", new { id = clienteModel.ClienteId} );
+                ComboRepresentantes();
                 return View(clienteModel);
             }
             else
             {
-                //UPDATE tabelaClientes SET Nome = {clienteModel.Nome} ... WHERE id = {clienteModel.ClienteId}
                 TempData["Mensagem"] = $"O cliente {clienteModel.Nome} foi alterado com sucesso";
+                clienteRepository.Update(clienteModel);
 
                 return RedirectToAction("Index", "Cliente");
             }
@@ -109,12 +98,11 @@ namespace Fiap.Web.AspNet5.Controllers
         }
 
 
+
         [HttpGet]
         public IActionResult Remover(int id)
         {
-            //"DELETE FROM tabelaCliente WHERE id = {id}";
-
-            Console.WriteLine($" id: {id}");
+            clienteRepository.Delete(id);
 
             TempData["Mensagem"] = $"O cliente foi removido com sucesso";
 

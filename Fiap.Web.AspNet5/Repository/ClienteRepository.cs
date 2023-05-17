@@ -91,8 +91,10 @@ namespace Fiap.Web.AspNet5.Repository
                                  ( string.IsNullOrEmpty(email)  || c.Email.ToLower().Contains(email.ToLower()) ) &&
                                  ( repreId == 0                 || c.RepresentanteId == repreId )
                           )                                                 // WHERE Contans = LIKE
-                    .OrderBy(c => c.Nome)          // ORDER BY
-                        .ToList();
+                    .OrderBy(c => c.Nome) // ORDER BY
+                        .ThenByDescending( c => c.Email )
+                        .ThenBy( c => c.Sobrenome)
+                            .ToList();
 
             return lista == null ? new List<ClienteModel>() : lista;
         }
@@ -120,6 +122,30 @@ namespace Fiap.Web.AspNet5.Repository
             dataContext.Clientes.Add(clienteModel);
             dataContext.SaveChanges();
         }
+
+        public void Update(ClienteModel clienteModel)
+        {
+            dataContext.Clientes.Update(clienteModel);
+            dataContext.SaveChanges();
+        }
+
+
+        public void Delete(ClienteModel clienteModel)
+        {
+            dataContext.Clientes.Remove(clienteModel);
+            dataContext.SaveChanges();
+        }
+
+
+        public void Delete(int id)
+        {
+            var cliente = new ClienteModel { 
+                ClienteId = id 
+            };
+
+            this.Delete(cliente);
+        }
+
 
     }
 }
