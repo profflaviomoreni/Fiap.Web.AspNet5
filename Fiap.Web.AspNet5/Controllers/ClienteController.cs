@@ -2,6 +2,7 @@
 using Fiap.Web.AspNet5.Models;
 using Fiap.Web.AspNet5.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Fiap.Web.AspNet5.Controllers
 {
@@ -21,6 +22,8 @@ namespace Fiap.Web.AspNet5.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            var lista = clienteRepository.FindByNomeAndEmailAndRepresentante("r","r",3);
+
             var listaClientes = clienteRepository.FindAllWithRepresentante();
             return View(listaClientes);
         }
@@ -29,9 +32,7 @@ namespace Fiap.Web.AspNet5.Controllers
         [HttpGet]
         public IActionResult Novo()
         {
-            var representantes = representanteRepository.FindAll();
-
-            ViewBag.Representantes = representantes;
+            ComboRepresentantes();
 
             return View(new ClienteModel());
         }
@@ -45,7 +46,8 @@ namespace Fiap.Web.AspNet5.Controllers
             {
                 ViewBag.Mensagem = $"O nome do cliente é requerido.";
 
-                //return RedirectToAction("Editar", "Cliente", new { id = clienteModel.ClienteId} );
+                ComboRepresentantes();
+
                 return View(clienteModel);
             }
             else
@@ -118,5 +120,21 @@ namespace Fiap.Web.AspNet5.Controllers
 
             return RedirectToAction("Index", "Cliente");
         }
+
+
+
+
+
+        private void ComboRepresentantes()
+        {
+            var listaRepresentante = representanteRepository.FindAll();
+
+            var selectListaRepresentante = 
+                new SelectList(listaRepresentante, "RepresentanteId", "NomeRepresentante");
+
+            ViewBag.Representantes = selectListaRepresentante;
+        }
+
+
     }
 }

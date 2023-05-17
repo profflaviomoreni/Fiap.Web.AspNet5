@@ -34,14 +34,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label">Representante</label>
-                        <select class="form-control col-5" name="RepresentanteId">
+                        <label class="control-label">Representante (@Model.RepresentanteId)</label>
+                        <select class="form-control col-5" asp-items="@ViewBag.Representantes" asp-for="RepresentanteId">
                             <option value="0">Selecione</option>
-                            @foreach (var repre in ViewBag.Representantes)
-                            {
-                                <option value="@repre.RepresentanteId">@repre.NomeRepresentante</option>
-                            }
-                        </select>
+                       </select>
                     </div>
 
                     <a asp-action="Index" class="btn btn-default btn-lg">Cancelar</a>
