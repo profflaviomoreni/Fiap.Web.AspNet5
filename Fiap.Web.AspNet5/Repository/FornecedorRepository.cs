@@ -1,10 +1,10 @@
 ﻿using Fiap.Web.AspNet5.Data;
 using Fiap.Web.AspNet5.Models;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Fiap.Web.AspNet5.Repository.Interface;
 
 namespace Fiap.Web.AspNet5.Repository
 {
-    public class FornecedorRepository
+    public class FornecedorRepository : IFornecedorRepository
     {
 
         private readonly DataContext dataContext;
