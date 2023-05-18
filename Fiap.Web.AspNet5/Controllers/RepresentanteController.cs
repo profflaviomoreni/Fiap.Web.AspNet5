@@ -1,6 +1,7 @@
 ﻿using Fiap.Web.AspNet5.Data;
 using Fiap.Web.AspNet5.Models;
 using Fiap.Web.AspNet5.Repository;
+using Fiap.Web.AspNet5.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,14 +9,14 @@ namespace Fiap.Web.AspNet5.Controllers
 {
     public class RepresentanteController : Controller
     {
-        private readonly RepresentanteRepository representanteRepository;
+        private readonly IRepresentanteRepository representanteRepository;
 
-        public RepresentanteController(DataContext context)
+        public RepresentanteController(IRepresentanteRepository _representanteRepository)
         {
-            representanteRepository = new RepresentanteRepository(context);
+            representanteRepository = _representanteRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var representantes = representanteRepository.FindAll();
 

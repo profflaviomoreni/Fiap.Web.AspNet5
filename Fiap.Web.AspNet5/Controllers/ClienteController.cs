@@ -1,6 +1,7 @@
 ﻿using Fiap.Web.AspNet5.Data;
 using Fiap.Web.AspNet5.Models;
 using Fiap.Web.AspNet5.Repository;
+using Fiap.Web.AspNet5.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -9,13 +10,13 @@ namespace Fiap.Web.AspNet5.Controllers
     public class ClienteController : Controller
     {
 
-        private readonly ClienteRepository clienteRepository;
-        private readonly RepresentanteRepository representanteRepository;
+        private readonly IClienteRepository clienteRepository;
+        private readonly IRepresentanteRepository representanteRepository;
 
-        public ClienteController(DataContext dataContext)
+        public ClienteController(IClienteRepository _clienteRepository, IRepresentanteRepository _representanteRepository)
         {
-            clienteRepository = new ClienteRepository(dataContext);
-            representanteRepository = new RepresentanteRepository(dataContext);
+            clienteRepository = _clienteRepository;
+            representanteRepository = _representanteRepository;
         }
 
 
