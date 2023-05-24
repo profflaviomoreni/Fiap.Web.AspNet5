@@ -23,10 +23,21 @@ namespace Fiap.Web.AspNet5.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            //var lista = clienteRepository.FindByNomeAndEmailAndRepresentante("Roberto", "br", 0);
+            ComboRepresentantes();
+            return View(new List<ClienteModel>());
+        }
 
-            var listaClientes = clienteRepository.FindAllWithRepresentante();
-            return View(listaClientes);
+
+        [HttpPost]
+        public IActionResult Pesquisar(string ClienteNome, string ClienteEmail, int RepresentanteId)
+        {
+            ComboRepresentantes();
+
+            var lista = 
+                clienteRepository
+                    .FindByNomeAndEmailAndRepresentante(ClienteNome, ClienteEmail, RepresentanteId);
+
+            return View( nameof(Index), lista);
         }
 
 

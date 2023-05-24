@@ -12,6 +12,8 @@ namespace Fiap.Web.AspNet5.Data
 
         public DbSet<ClienteModel> Clientes { get; set; }
 
+        public DbSet<UsuarioModel> Usuarios { get; set; }
+
         public DataContext(DbContextOptions options) : base(options)
         {
         }

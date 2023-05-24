@@ -11,7 +11,30 @@
     <a asp-controller="Cliente" asp-action="Novo" class="create btn btn-dark">Novo Cliente</a>
 </p>
 
+<div class="jumbotron">
+    <form asp-action="Pesquisar">
+        <div class="form-group">
+            <label class="control-label">Nome</label>
+            <input class="form-control col-5" name="ClienteNome" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Email</label>
+            <input class="form-control col-5" name="ClienteEmail" />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Representante</label>
+            <select class="form-control col-5" name="RepresentanteId" asp-items="@ViewBag.Representantes">
+                <option value="">Selecione</option>
+            </select>
+        </div>
 
+        <button type="submit" class="btn btn-primary btn-lg">Buscar</button>
+    </form>
+</div>
+<hr />
+
+
+@if ( Model.Count() > 0 ) {
 <table class="table table-striped" border="1" cellspacing="0" cellpadding="0">
     <thead>
         <tr>
@@ -26,5 +49,6 @@
     <partial name="_ClienteItem" model="Model" />
 
 </table>
+}
 
     
