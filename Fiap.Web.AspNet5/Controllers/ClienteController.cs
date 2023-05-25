@@ -1,7 +1,10 @@
-﻿using Fiap.Web.AspNet5.Data;
+﻿using AutoMapper;
+using Fiap.Web.AspNet5.Data;
+using Fiap.Web.AspNet5.Migrations;
 using Fiap.Web.AspNet5.Models;
 using Fiap.Web.AspNet5.Repository;
 using Fiap.Web.AspNet5.Repository.Interface;
+using Fiap.Web.AspNet5.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -12,32 +15,42 @@ namespace Fiap.Web.AspNet5.Controllers
 
         private readonly IClienteRepository clienteRepository;
         private readonly IRepresentanteRepository representanteRepository;
+        private readonly IMapper mapper;
 
-        public ClienteController(IClienteRepository _clienteRepository, IRepresentanteRepository _representanteRepository)
+        public ClienteController(
+            IClienteRepository _clienteRepository, 
+            IRepresentanteRepository _representanteRepository,
+            IMapper _mapper)
         {
             clienteRepository = _clienteRepository;
             representanteRepository = _representanteRepository;
+            mapper = _mapper;
         }
 
 
         [HttpGet]
         public IActionResult Index()
         {
-            ComboRepresentantes();
-            return View(new List<ClienteModel>());
+            var vm = new ClientePesquisaViewModel();
+            vm.Representantes = LoadRepresentantes();
+
+            return View(vm);
         }
 
 
         [HttpPost]
-        public IActionResult Pesquisar(string ClienteNome, string ClienteEmail, int RepresentanteId)
+        public IActionResult Pesquisar(ClientePesquisaViewModel vm)
         {
-            ComboRepresentantes();
+            vm.Representantes = LoadRepresentantes();
 
-            var lista = 
-                clienteRepository
-                    .FindByNomeAndEmailAndRepresentante(ClienteNome, ClienteEmail, RepresentanteId);
+            var listaClienteModel = clienteRepository
+                .FindByNomeAndEmailAndRepresentante(vm.ClienteNome, vm.ClienteEmail, vm.RepresentanteId);
 
-            return View( nameof(Index), lista);
+            var listaClienteVM = mapper.Map<List<ClienteViewModel>>(listaClienteModel);
+
+            vm.Clientes = listaClienteVM;
+
+            return View(nameof(Index), vm);
         }
 
 
@@ -134,6 +147,14 @@ namespace Fiap.Web.AspNet5.Controllers
 
             ViewBag.Representantes = selectListaRepresentante;
         }
+
+
+        private SelectList LoadRepresentantes()
+        {
+            var listaRepresentante = representanteRepository.FindAll();
+            return new SelectList(listaRepresentante, "RepresentanteId", "NomeRepresentante");
+        }
+
 
 
     }

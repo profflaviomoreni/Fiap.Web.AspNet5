@@ -1,4 +1,4 @@
-﻿@model IList<ClienteModel>
+﻿@model Fiap.Web.AspNet5.ViewModel.ClientePesquisaViewModel
 
 <h1>Clientes</h1>
 
@@ -14,16 +14,16 @@
 <div class="jumbotron">
     <form asp-action="Pesquisar">
         <div class="form-group">
-            <label class="control-label">Nome</label>
-            <input class="form-control col-5" name="ClienteNome" />
+            <label class="control-label" asp-for="ClienteNome"></label>
+            <input class="form-control col-5" asp-for="ClienteNome" />
         </div>
         <div class="form-group">
-            <label class="control-label">Email</label>
-            <input class="form-control col-5" name="ClienteEmail" />
+            <label class="control-label" asp-for="ClienteEmail"></label>
+            <input class="form-control col-5" asp-for="ClienteEmail" />
         </div>
         <div class="form-group">
-            <label class="control-label">Representante</label>
-            <select class="form-control col-5" name="RepresentanteId" asp-items="@ViewBag.Representantes">
+            <label class="control-label" asp-for="RepresentanteId"></label>
+            <select class="form-control col-5" asp-for="RepresentanteId" asp-items="@Model.Representantes">
                 <option value="">Selecione</option>
             </select>
         </div>
@@ -34,7 +34,7 @@
 <hr />
 
 
-@if ( Model.Count() > 0 ) {
+@if ( Model.Clientes != null && Model.Clientes.Count() > 0 ) {
 <table class="table table-striped" border="1" cellspacing="0" cellpadding="0">
     <thead>
         <tr>
@@ -46,7 +46,22 @@
         </tr>
     </thead>
   
-    <partial name="_ClienteItem" model="Model" />
+    <tbody>
+        @foreach (var cliente in Model.Clientes)
+        {
+            <tr>
+                <td data-field="id">@cliente.ClienteId</td>
+                <td data-field="name">@cliente.Nome</td>
+                <td data-field="email">@cliente.Email</td>
+                <td data-field="representante">@cliente.Representante.NomeRepresentante</td>
+                <td class="actions" width="220">
+                    <a asp-controller="Cliente" asp-action="Detalhe" asp-route-id="@cliente.ClienteId">Detalhe</a>
+                    <a asp-controller="Cliente" asp-action="Editar" asp-route-id="@cliente.ClienteId">Editar</a>
+                    <a href="/Cliente/Remover/@cliente.ClienteId">Remover</a>
+                </td>
+            </tr>
+        }
+    </tbody>
 
 </table>
 }
