@@ -1,4 +1,18 @@
-﻿<!DOCTYPE html>
+﻿@using Fiap.Web.AspNet5.ViewModel
+@{
+    string? emailUsuario = "";
+
+    var usuarioSession = Context.Session.GetString("usuarioLogado");
+
+    if ( ! string.IsNullOrEmpty(usuarioSession) ) {
+        var usuarioLogado = Newtonsoft.Json.JsonConvert.DeserializeObject<LoginViewModel>(usuarioSession);
+        emailUsuario = usuarioLogado.UsuarioEmail;
+    }
+    
+}
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -22,15 +36,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Index">Cliente</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Fornecedor" asp-action="Index">Fornecedor</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Representante" asp-action="Index">Representante</a>
-                        </li>
+
+                        @if ( ! string.IsNullOrEmpty(emailUsuario) ) {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Index">Cliente</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Fornecedor" asp-action="Index">Fornecedor</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Representante" asp-action="Index">Representante</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logoff">Logoff</a>
+                            </li>
+                        } else {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Index">Login</a>
+                            </li>
+                        }
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
@@ -49,6 +74,7 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2023 - Fiap.Web.AspNet5 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            @emailUsuario
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js?v=@DateTime.Now"></script>

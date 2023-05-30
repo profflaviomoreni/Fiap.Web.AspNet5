@@ -3,7 +3,6 @@ using Fiap.Web.AspNet5.Models;
 using Fiap.Web.AspNet5.Repository.Interface;
 using Fiap.Web.AspNet5.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Fiap.Web.AspNet5.Controllers
 {

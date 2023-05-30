@@ -1,12 +1,11 @@
-﻿using Fiap.Web.AspNet5.Data;
+﻿using Fiap.Web.AspNet5.Controllers.Filters;
 using Fiap.Web.AspNet5.Models;
-using Fiap.Web.AspNet5.Repository;
 using Fiap.Web.AspNet5.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Fiap.Web.AspNet5.Controllers
 {
+    [FiapAuthFilter]
     public class RepresentanteController : Controller
     {
         private readonly IRepresentanteRepository representanteRepository;

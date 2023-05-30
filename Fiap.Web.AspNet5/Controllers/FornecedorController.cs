@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+﻿using Fiap.Web.AspNet5.Controllers.Filters;
 using Fiap.Web.AspNet5.Data;
 using Fiap.Web.AspNet5.Models;
 using Fiap.Web.AspNet5.Repository;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Fiap.Web.AspNet5.Controllers
 {
+    [FiapAuthFilter]
     public class FornecedorController : Controller
     {
 

@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using Fiap.Web.AspNet5.Data;
-using Fiap.Web.AspNet5.Migrations;
+using Fiap.Web.AspNet5.Controllers.Filters;
 using Fiap.Web.AspNet5.Models;
-using Fiap.Web.AspNet5.Repository;
 using Fiap.Web.AspNet5.Repository.Interface;
 using Fiap.Web.AspNet5.ViewModel;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +8,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Fiap.Web.AspNet5.Controllers
 {
+    [FiapLogFilter]
+    [FiapAuthFilter]
     public class ClienteController : Controller
     {
 
