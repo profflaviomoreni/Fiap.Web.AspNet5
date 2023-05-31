@@ -1,6 +1,7 @@
 ﻿using Fiap.Web.AspNet5.Data;
 using Fiap.Web.AspNet5.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace Fiap.Web.AspNet5.Controllers
