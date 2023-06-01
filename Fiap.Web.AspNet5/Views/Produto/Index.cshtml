@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Fiap.Web.AspNet5.ViewModel.ProdutoViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Produto</h1>
+
+@if (!String.IsNullOrEmpty((String)TempData["Mensagem"]))
+{
+    <div class="alert alert-warning" role="alert">@TempData["Mensagem"]</div>
+}
+
+<p>
+    <a asp-action="Novo">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProdutoNome)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProdutoNome)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ProdutoId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ProdutoId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ProdutoId">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Fiap.Web.AspNet5.Models;
+using Fiap.Web.AspNet5.Repository;
 using Fiap.Web.AspNet5.Repository.Interface;
 using Fiap.Web.AspNet5.ViewModel;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,9 @@ namespace Fiap.Web.AspNet5.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var produtos = produtoRepository.FindAll();
+            var vm = mapper.Map<List<ProdutoViewModel>>(produtos);
+            return View(vm);
         }
 
 
@@ -38,31 +41,110 @@ namespace Fiap.Web.AspNet5.Controllers
         [HttpPost]
         public IActionResult Novo(ProdutoNovoViewModel produtoNovoViewModel)
         {
+            try {  
 
-            var produtoModel = new ProdutoModel();
-            produtoModel.ProdutoNome = produtoNovoViewModel.ProdutoNome;
-            produtoModel.ProdutosLojas = new List<ProdutoLojaModel>();
+                var produtoModel = new ProdutoModel();
+                produtoModel.ProdutoNome = produtoNovoViewModel.ProdutoNome;
+                produtoModel.ProdutosLojas = new List<ProdutoLojaModel>();
 
-            if (produtoNovoViewModel.LojaId != null || produtoNovoViewModel.LojaId.Count > 0)
-            {
-                foreach (var item in produtoNovoViewModel.LojaId)
+                if (produtoNovoViewModel.LojaId == null || produtoNovoViewModel.LojaId.Count < 1)
                 {
-                    var produtoLojaModel = new ProdutoLojaModel();
-                    produtoLojaModel.LojaId = item;
-                    produtoLojaModel.Produto = produtoModel;
-
-                    produtoModel.ProdutosLojas.Add(produtoLojaModel);
+                    throw new Exception("Nenhum loja selecionada para o cadastro");
                 }
+                else
+                {
+                    foreach (var item in produtoNovoViewModel.LojaId)
+                    {
+                        var produtoLojaModel = new ProdutoLojaModel();
+                        produtoLojaModel.LojaId = item;
+                        produtoLojaModel.Produto = produtoModel;
+
+                        produtoModel.ProdutosLojas.Add(produtoLojaModel);
+                    }
+                }
+
+                produtoRepository.Insert(produtoModel);
+
+                TempData["mensagem"] = "Produto cadastrado com sucesso";
+                return RedirectToAction("Index");
+
+            } 
+            catch (Exception ex)
+            {
+                TempData["mensagem"] = "Não foi possível cadastrar o produto, verifique se existe alguma loja selecionada";
+                produtoNovoViewModel.Lojas = LoadLojas();
+                return View(produtoNovoViewModel);
             }
-
-            produtoRepository.Insert(produtoModel);
-
-            return View(produtoNovoViewModel);
-
-            
 
         }
 
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var produto = produtoRepository.FindById(id);
+
+            var vm = new ProdutoEditarViewModel();
+            vm.ProdutoId = id;
+            vm.ProdutoNome = produto.ProdutoNome;
+            vm.LojaId = produto.ProdutosLojas.ToList().ConvertAll(obj => obj.LojaId);
+            vm.Lojas = LoadLojas();
+            return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(ProdutoEditarViewModel produtoViewModel)
+        {
+            try
+            {
+
+                var produtoModel = new ProdutoModel();
+                produtoModel.ProdutoNome = produtoViewModel.ProdutoNome;
+                produtoModel.ProdutoId = produtoViewModel.ProdutoId;
+                produtoModel.ProdutosLojas = new List<ProdutoLojaModel>();
+
+                if (produtoViewModel.LojaId == null || produtoViewModel.LojaId.Count < 1)
+                {
+                    throw new Exception("Nenhum loja selecionada para o cadastro");
+                }
+                else
+                {
+                    foreach (var item in produtoViewModel.LojaId)
+                    {
+                        var produtoLojaModel = new ProdutoLojaModel();
+                        produtoLojaModel.LojaId = item;
+                        produtoLojaModel.Produto = produtoModel;
+
+                        produtoModel.ProdutosLojas.Add(produtoLojaModel);
+                    }
+                }
+
+                produtoRepository.Update(produtoModel);
+
+                TempData["mensagem"] = "Produto alterado com sucesso";
+                return RedirectToAction("Index");
+
+            }
+            catch (Exception ex)
+            {
+                TempData["mensagem"] = "Não foi possível alterado o produto, verifique se existe alguma loja selecionada";
+                produtoViewModel.Lojas = LoadLojas();
+                return View(produtoViewModel);
+            }
+
+        }
+
+
+        public IActionResult Delete(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            produtoRepository.Delete(id);
+            return RedirectToAction(nameof(Index));
+        }
 
 
 

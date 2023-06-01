@@ -1,5 +1,5 @@
 ﻿@using Fiap.Web.AspNet5.ViewModel;
-@model ProdutoNovoViewModel
+@model ProdutoEditarViewModel
 
 
 
@@ -13,8 +13,9 @@
                 {
                     <div class="alert alert-warning" role="alert">@TempData["Mensagem"]</div>
                 }
-                
-                <form asp-controller="Produto" asp-action="Novo" method="post">
+
+                <form asp-controller="Produto" asp-action="Edit" method="post">
+                    <input class="form-control col-5" asp-for="ProdutoId" />
                     <div class="form-group">
                         <label class="control-label">Nome:</label>
                         <input class="form-control col-5" asp-for="ProdutoNome" />

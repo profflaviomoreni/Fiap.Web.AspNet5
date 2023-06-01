@@ -15,6 +15,17 @@ namespace Fiap.Web.AspNet5.Repository
             dataContext = context;
         }
 
+        public void Delete(int id)
+        {
+            var produto = new ProdutoModel()
+            { 
+                ProdutoId = id 
+            };
+
+            dataContext.Produtos.Remove(produto);
+            dataContext.SaveChanges();
+        }
+
         public IList<ProdutoModel> FindAll()
         {
             return dataContext.Produtos.ToList();
@@ -34,6 +45,15 @@ namespace Fiap.Web.AspNet5.Repository
             dataContext.Produtos.Add(model);
             dataContext.SaveChanges();
             return model.ProdutoId;
+        }
+
+        public void Update(ProdutoModel model)
+        {
+            var lojas = dataContext.ProdutosLojas.Where(l => l.ProdutoId == model.ProdutoId).ToList();
+            dataContext.ProdutosLojas.RemoveRange(lojas);
+
+            dataContext.Produtos.Update(model);
+            dataContext.SaveChanges();
         }
     }
 }

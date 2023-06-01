@@ -11,5 +11,9 @@ namespace Fiap.Web.AspNet5.Repository.Interface
 
         public int Insert(ProdutoModel model);
 
+        public void Delete(int id);
+
+        public void Update(ProdutoModel model);
+
     }
 }
