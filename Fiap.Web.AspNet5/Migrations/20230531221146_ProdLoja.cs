@@ -5,7 +5,7 @@
 namespace Fiap.Web.AspNet5.Migrations
 {
     /// <inheritdoc />
-    public partial class ProdutoLoja : Migration
+    public partial class ProdLoja : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

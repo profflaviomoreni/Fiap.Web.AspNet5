@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fiap.Web.AspNet5.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230531012549_ProdutoLoja")]
-    partial class ProdutoLoja
+    [Migration("20230531221146_ProdLoja")]
+    partial class ProdLoja
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

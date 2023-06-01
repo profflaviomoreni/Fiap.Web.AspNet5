@@ -28,5 +28,12 @@ namespace Fiap.Web.AspNet5.Repository
                             .ThenInclude(l => l.Loja)  // inner joing LOJA
                         .SingleOrDefault(p => p.ProdutoId == id);
         }
+
+        public int Insert(ProdutoModel model)
+        {
+            dataContext.Produtos.Add(model);
+            dataContext.SaveChanges();
+            return model.ProdutoId;
+        }
     }
 }
